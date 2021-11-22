@@ -1,0 +1,53 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: 'Creates an S3 Bucket'
+
+Parameters: 
+  bucketName:
+    Type: String
+    Description: Name of the bucket to be created
+  environment:
+    Type: String
+    Description: Name of the environment where the bucket is created
+  encryptionType:
+    Type: String
+    AllowedValues:
+      - "aws:kms"
+      - "AES256"
+    Default: "AES256"
+    Description: Type of encryption
+  kmsMasterKeyId:
+    Type: String
+    Description: ID of the KMS key to use
+Conditions:
+  encryptionCheck: !Equals [!Ref encryptionType, "AES256"]
+
+Resources:
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties: 
+      AccessControl: Private
+      BucketName: !Join ["", [!Ref bucketName, !Ref environment]]
+      BucketEncryption: 
+        ServerSideEncryptionConfiguration: 
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: !If
+              - encryptionCheck
+              - AES256
+              - 'aws:kms'
+              KMSMasterKeyID: !If
+              - encryptionCheck
+              - !Ref "AWS::NoValue"
+              - !Ref kmsMasterKeyId
+
+
+Outputs:
+  BucketName:
+    Description: Name of the Bucket Created
+    Value: !Ref S3Bucket
+    Export:
+      Name: !Sub "${AWS::StackName}-bucketName"
+  BucketArn:
+    Description: ARN of the Bucket Created
+    Value: !GetAtt S3Bucket.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-bucketArn"
