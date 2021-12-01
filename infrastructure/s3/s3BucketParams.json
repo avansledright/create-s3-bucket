@@ -1,0 +1,18 @@
+[
+    {
+        "ParameterKey": "bucketName",
+        "ParameterValue": "${bucketName}"
+    },
+    {
+        "ParameterKey": "environment",
+        "ParameterValue": "${environment}"
+    },
+    {
+        "ParameterKey": "encryptionType",
+        "ParameterValue": "${encryptionType}"
+    },
+    {
+        "ParameterKey": "kmsMasterKeyId",
+        "ParameterValue": "${kmsMasterKeyId}"
+    }
+]
