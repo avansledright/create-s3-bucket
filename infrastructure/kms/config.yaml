@@ -1,0 +1,12 @@
+Resources: 
+  kms: 
+    kmskey-1:
+      multiRegion:
+      description:
+      enabled:
+      keyRotation:
+      keySpec:
+      keyAliasName:
+      friendlyName:
+      appName:
+      keyUsage:

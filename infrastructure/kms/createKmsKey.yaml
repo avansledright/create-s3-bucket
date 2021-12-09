@@ -1,0 +1,78 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: 'Create KMS Key'
+
+Parameters:
+  description:
+    Type: String
+    Description: Describe the key
+  enabled:
+    Type: String
+    Default: True
+    Description: Is this key enabled?
+    AllowedValues: 
+      - True
+      - False
+  enableKeyRotation:
+    Type: String
+    Description: Is key rotation enabled?
+    AllowedValues:
+      - True
+      - False
+    Default: True
+  keySpec:
+    Type: String
+    Default: SYMMETRIC_DEFAULT
+    AllowedValues: 
+      - SYMMETRIC_DEFAULT
+      - RSA_2048
+      - RSA_3072
+      - RSA_4096
+      - ECC_NIST_P256
+      - ECC_NIST_P384
+      - ECC_NIST_P521
+      - ECC_SECG_P256K1
+  keyUsage:
+    Type: String
+    AllowedValues:
+      - ENCRYPT_DECRYPT
+      - SIGN_VERIFY
+    Default: ENCRYPT_DECRYPT
+  keyAliasName:
+    Type: String
+    Description: Name for the key alias
+  multiRegion:
+    Type: String
+
+
+Resources:
+  newKMSKey:
+    Type: AWS::KMS::Key
+    Properties: 
+      Description: !Ref description
+      Enabled: !Ref enabled
+      EnableKeyRotation: !Ref enableKeyRotation
+      KeyPolicy: 
+        Id: key-default-1
+        Version: 2012-10-17
+        Statement: 
+        - Sid: Enable IAM User Permissions
+          Effect: Allow
+          Principal:
+            AWS:
+              Fn::Join:
+              - ''
+              - - 'arn:aws:iam::'
+                -  Ref: 'AWS::AccountId'
+                - ':root'
+          Action: 'kms:*'
+          Resource: '*'
+      KeySpec: !Ref keySpec
+      KeyUsage: !Ref keyUsage
+      PendingWindowInDays: 30
+      MultiRegion: !Ref multiRegion
+  
+  newKMSKeyAlias:
+    Type: AWS::KMS::Alias
+    Properties: 
+      AliasName: !Join ["", ["alias/", !Ref keyAliasName]]
+      TargetKeyId: !Join ["", [!Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/", !Ref newKMSKey]]

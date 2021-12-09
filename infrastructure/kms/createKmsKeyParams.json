@@ -1,0 +1,30 @@
+[
+    {
+        "ParameterKey": "description",
+        "ParameterValue": "${description}"
+    },
+    {
+        "ParameterKey": "enabled",
+        "ParameterValue": "${enabled}"
+    },
+    {
+        "ParameterKey": "enableKeyRotation",
+        "ParameterValue": "${enableKeyRotation}"
+    },
+    {
+        "ParameterKey": "keySpec",
+        "ParameterValue": "${keySpec}"
+    },
+    {
+        "ParameterKey": "keyAliasName",
+        "ParameterValue": "${keyAliasName}"
+    },
+    {
+        "ParameterKey": "multiRegion",
+        "ParameterValue": "${multiRegion}"
+    },
+    {
+        "ParameterKey": "keyUsage",
+        "ParameterValue": "${keyUsage}"
+    }
+]
