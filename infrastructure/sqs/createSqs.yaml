@@ -6,7 +6,7 @@ Parameters:
   queueName:
     Type: String
     Description: Name of the queue to be created
-  visibilityTimeOut:
+  visibilityTimeout:
     Type: Number
     Default: 600
     Description: Visibility Timeout. Refer to AWS doc for more info
@@ -34,7 +34,7 @@ Resources:
         - fifoQueue
         - True
         - !Ref AWS::NoValue
-      VisibilityTimeout: !Ref visibilityTimeOut
+      VisibilityTimeout: !Ref visibilityTimeout
 
 
 Outputs:
