@@ -1,0 +1,18 @@
+[
+    {
+        "ParameterKey": "queueName",
+        "ParameterValue": "${queueName}"
+    },
+    {
+        "ParameterKey": "visibilityTimeout",
+        "ParameterValue": "${visibilityTimeout}"
+    },
+    {
+        "ParameterKey": "environment",
+        "ParameterValue": "${environment}"
+    },
+    {
+        "ParameterKey": "fifoQueue",
+        "ParameterValue": "${fifoQueue}"
+    }
+]

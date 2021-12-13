@@ -1,0 +1,55 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'Template to create SQS queue'
+
+Parameters: 
+  queueName:
+    Type: String
+    Description: Name of the queue to be created
+  visibilityTimeOut:
+    Type: Number
+    Default: 600
+    Description: Visibility Timeout. Refer to AWS doc for more info
+  environment:
+    Type: String
+    Description: Name of the environment where the queue is created
+  fifoQueue:
+    Type: String
+    AllowedValues:
+      - "True"
+      - "False"
+    Description: Is this is a FIFO queue?
+Conditions:
+  fifoQueue: !Equals [!Ref fifoQueue, "True"]
+
+Resources:
+  SQSQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !If
+        - fifoQueue
+        - !Join ["", [!Ref queueName, !Ref environment, ".fifo"]]
+        - !Join ["", [!Ref queueName, !Ref environment]]
+      FifoQueue: !If
+        - fifoQueue
+        - True
+        - !Ref AWS::NoValue
+      VisibilityTimeout: !Ref visibilityTimeOut
+
+
+Outputs:
+  QueueUrl:
+    Description: URL of the SQS queue
+    Value: !Ref SQSQueue
+    Export:
+      Name: !Sub "${AWS::StackName}-queueUrl"
+  QueueName:
+    Description: Name of the SQS queue
+    Value: !GetAtt SQSQueue.QueueName
+    Export:
+      Name: !Sub "${AWS::StackName}-queueName"
+  QueueArn:
+    Description: ARN of the SQS queue
+    Value: !GetAtt SQSQueue.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-queueArn"
